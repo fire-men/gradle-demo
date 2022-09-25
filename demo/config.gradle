@@ -1,0 +1,21 @@
+ext {
+
+    // 定义版本号
+    versions = [
+            sourceCompatibility: JavaVersion.VERSION_1_8,
+            targetCompatibility: JavaVersion.VERSION_1_8,
+            junit              : "5.7.0",
+            lombok             : "1.18.8",
+            commonsCollections : "3.2",
+            logback            : "1.2.3",
+            springboot         : "2.3.7.RELEASE"
+    ]
+
+
+    dependencyManagement = [
+            "commons-collections": "commons-collections:commons-collections:${versions.commonsCollections}"
+
+    ]
+
+
+}

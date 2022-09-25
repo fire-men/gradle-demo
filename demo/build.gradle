@@ -1,0 +1,91 @@
+// 依赖版本号统一管理
+apply from: "config.gradle"
+
+buildscript {
+    apply from: "config.gradle"
+    repositories {
+        maven{url 'https://maven.aliyun.com/repository/public'}
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${versions.get("springboot")}"
+    }
+}
+
+
+
+// -------------------------------------自定义任务------------------------------------
+// 定义hello任务
+//task hello {
+//    println "hello world"
+//}
+
+// 任务依赖 --> hello任务执行完毕后，在执行info任务
+//task info(dependsOn: hello) {
+//    println "im gradle"
+//}
+
+
+// ------------------------------------定义属性----------------------------------
+ext.username = 'zhangsan'
+ext.password = '123456'
+
+// 获取自定义属性值
+task printUserInfo() {
+    println "$username"
+    println "$password"
+}
+
+// 子模块配置
+subprojects {
+    // 插件
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    // 控制springBoot版本
+    apply plugin:'org.springframework.boot'
+    apply plugin:'io.spring.dependency-management'
+
+    // 编译和运行jdk版本
+    sourceCompatibility = "${versions.sourceCompatibility}"
+    targetCompatibility = "${versions.targetCompatibility}"
+
+    group 'org.example'
+    version '1.0-SNAPSHOT'
+
+    // 设置编码格式
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    // gradle依赖仓库
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/spring/' }
+        google()
+        mavenCentral()
+    }
+
+    // 子模块公共的部分
+    dependencies {
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit}"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+
+        // lombok
+        implementation "org.projectlombok:lombok:${versions.lombok}"
+        // 可以使用log对象 --试了，失败
+        annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
+        // 高版本不能使用compile
+        // compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+        //implementation 'commons-collections:commons-collections:3.2'
+
+        // logback
+        //implementation "ch.qos.logback:logback-classic:${versions.get("logback")}"
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+    }
+
+    // junit测试
+    test {
+        useJUnitPlatform()
+    }
+}

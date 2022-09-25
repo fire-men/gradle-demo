@@ -1,0 +1,6 @@
+rootProject.name = 'demo'
+include 'demo-admin'
+include 'demo-gateway'
+include 'demo-auth'
+include 'demo-common'
+

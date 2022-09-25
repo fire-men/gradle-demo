@@ -1,0 +1,13 @@
+def lib = rootProject.ext.dependencyManagement
+
+dependencies {
+    implementation project(':demo-common')
+    implementation lib["commons-collections"]
+}
+
+bootJar {
+    enabled = true
+    baseName = "admin"
+    version=""
+}
+
